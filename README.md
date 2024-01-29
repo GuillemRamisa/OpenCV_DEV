@@ -15,3 +15,5 @@ https://github.com/opencv/opencv
 - Set your working Directory: Product--> Scheme--> Edit Scheme--> Run--> Options--> Working Directory: True --> Use Custom Directory: $(PROJECT_DIR)/<ProjectName>
 
 With that setup files/images in your project folder can be loaded without absolute paths
+
+![Screengrab](images_tut/OpenCV_base.png)
