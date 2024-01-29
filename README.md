@@ -1,4 +1,4 @@
-# OPENCV DEV files in C++
+# OpenCV DEV files in C++
 
 ## Using Open CV libs for mac
 https://opencv.org/  
