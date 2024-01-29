@@ -16,9 +16,7 @@ using namespace std;
 
 int main() {
     
-//    /Users/guillemramisadesoto/Documents/BASE_IMAGES/CMS_512.jpeg
-    
-    string path = "/Users/guillemramisadesoto/Documents/BASE_IMAGES/CMS_512.exr";
+    string path = "CMS_512.jpeg";
     Mat img = imread(path);
     imshow("Image", img);
     waitKey(0);
