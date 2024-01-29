@@ -16,7 +16,9 @@ using namespace std;
 
 int main() {
     
-    string path = "GRDS_closeup.JPEG";
+//    /Users/guillemramisadesoto/Documents/BASE_IMAGES/CMS_512.jpeg
+    
+    string path = "/Users/guillemramisadesoto/Documents/BASE_IMAGES/CMS_512.exr";
     Mat img = imread(path);
     imshow("Image", img);
     waitKey(0);
