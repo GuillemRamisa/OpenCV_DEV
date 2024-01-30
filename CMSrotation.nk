@@ -1,0 +1,211 @@
+#! /Applications/Nuke14.0v2/Nuke14.0v2.app/Contents/MacOS/libnuke-14.0.2.dylib -nx
+#write_info Write1 file:"/Users/guillemramisadesoto/Documents/XCODE/OpenCV_DEV/CMSrotation.mp4" format:"512 512 1" chans:":rgba.red:rgba.green:rgba.blue:" framerange:"0 24" fps:"0" colorspace:"default (Gamma2.2)" datatype:"unknown" transfer:"unknown" views:"main" colorManagement:"Nuke"
+version 14.0 v2
+define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
+<layout version="1.0">
+    <window x="0" y="43" w="1710" h="1041" maximized="1" screen="0">
+        <splitter orientation="1">
+            <split size="40"/>
+            <dock id="" hideTitles="1" activePageId="Toolbar.1">
+                <page id="Toolbar.1"/>
+            </dock>
+            <split size="1047" stretch="1"/>
+            <splitter orientation="2">
+                <split size="599"/>
+                <dock id="" activePageId="Viewer.1">
+                    <page id="Viewer.1"/>
+                </dock>
+                <split size="422"/>
+                <dock id="" activePageId="DAG.1">
+                    <page id="DAG.1"/>
+                    <page id="Curve Editor.1"/>
+                    <page id="DopeSheet.1"/>
+                </dock>
+            </splitter>
+            <split size="615"/>
+            <dock id="" activePageId="Properties.1" focus="true">
+                <page id="Properties.1"/>
+                <page id="uk.co.thefoundry.backgroundrenderview.1"/>
+                <page id="Scenegraph.1"/>
+            </dock>
+        </splitter>
+    </window>
+</layout>
+}
+Root {
+ inputs 0
+ name /Users/guillemramisadesoto/Documents/XCODE/OpenCV_DEV/CMSrotation.nk
+ frame 0
+ first_frame 0
+ last_frame 24
+ format "2048 1556 0 0 2048 1556 1 2K_Super_35(full-ap)"
+ proxy_type scale
+ proxy_format "1024 778 0 0 1024 778 1 1K_Super_35(full-ap)"
+ colorManagement Nuke
+ workingSpaceLUT linear
+ monitorLut sRGB
+ monitorOutLUT rec709
+ int8Lut sRGB
+ int16Lut sRGB
+ logLut Cineon
+ floatLut linear
+}
+Axis3 {
+ inputs 0
+ rotate {{frame*(360/24)} 0 0}
+ name Axis2
+ xpos 350
+ ypos -155
+}
+Camera3 {
+ inputs 0
+ translate {2 0.5 0.5}
+ rotate {0 90 0}
+ focal 30
+ name Camera1
+ xpos 282
+ ypos 79
+}
+CMSTestPattern {
+ inputs 0
+ cube_size 4
+ name CMSTestPattern1
+ xpos 54
+ ypos -207
+}
+Shuffle2 {
+ fromInput1 {{0} B}
+ fromInput2 {{0} B}
+ mappings "4 rgba.red 0 0 rgba.red 0 0 rgba.green 0 1 rgba.green 0 1 rgba.blue 0 2 rgba.blue 0 2 white -1 -1 rgba.alpha 0 3"
+ name Shuffle1
+ xpos 54
+ ypos -135
+}
+Reformat {
+ type "to box"
+ box_width 512
+ filter impulse
+ name Reformat1
+ xpos 54
+ ypos -91
+}
+set N74ab3a00 [stack 0]
+Dot {
+ name Dot1
+ xpos -10
+ ypos 27
+}
+push $N74ab3a00
+Colorspace {
+ colorspace_in sRGB
+ colorspace_out YCbCr
+ name Colorspace1
+ xpos 55
+ ypos -60
+}
+Add {
+ value {0 -0.5 -0.5 0}
+ name Add1
+ xpos 55
+ ypos -36
+}
+ColorMatrix {
+ matrix {
+     {{parent.Axis2.world_matrix.0} {parent.Axis2.world_matrix.1} {parent.Axis2.world_matrix.2}}
+     {{parent.Axis2.world_matrix.4} {parent.Axis2.world_matrix.5} {parent.Axis2.world_matrix.6}}
+     {{parent.Axis2.world_matrix.8} {parent.Axis2.world_matrix.9} {parent.Axis2.world_matrix.10}}
+   }
+ name ColorMatrix2
+ xpos 55
+ ypos 4
+}
+Add {
+ value {0 0.5 0.5 0}
+ name Add2
+ xpos 55
+ ypos 28
+}
+add_layer {P P.red P.green P.blue P.alpha}
+Shuffle2 {
+ inputs 2
+ fromInput1 {{0} B A}
+ out1 P
+ fromInput2 {{1} B A}
+ in2 rgba
+ out2 rgba
+ mappings "8 rgba.red 0 0 P.red 0 0 rgba.green 0 1 P.green 0 1 rgba.blue 0 2 P.blue 0 2 rgba.alpha 0 3 P.alpha 0 3 rgba.red 1 0 rgba.red 1 0 rgba.green 1 1 rgba.green 1 1 rgba.blue 1 2 rgba.blue 1 2 rgba.alpha 1 3 rgba.alpha 1 3"
+ name Shuffle2
+ xpos 55
+ ypos 60
+}
+PositionToPoints2 {
+ P_channel P
+ detail 1
+ name PositionToPoints1
+ xpos 55
+ ypos 89
+}
+Constant {
+ inputs 0
+ channels rgb
+ name Constant1
+ xpos -126
+ ypos -83
+}
+Reformat {
+ type "to box"
+ box_width 512
+ box_height 512
+ box_fixed true
+ filter impulse
+ black_outside true
+ pbb true
+ name Reformat2
+ xpos -137
+ ypos 15
+}
+Crop {
+ box {0 0 512 512}
+ name Crop1
+ xpos -137
+ ypos 39
+}
+ScanlineRender {
+ inputs 3
+ conservative_shader_sampling false
+ projection_mode perspective
+ motion_vectors_type distance
+ name ScanlineRender1
+ xpos 54
+ ypos 122
+}
+Write {
+ file /Users/guillemramisadesoto/Documents/XCODE/OpenCV_DEV/CMSrotation.mp4
+ file_type mov
+ mov64_format "mp4 (MP4 (MPEG-4 Part 14))"
+ mov64_codec mp4v
+ mov_h264_codec_profile "High 4:2:0 8-bit"
+ mov64_pixel_format {{0} "yuv420p\tYCbCr 4:2:0 8-bit"}
+ mov64_quality High
+ mov64_ycbcr_matrix_type "Rec 709"
+ mov64_fast_start true
+ mov64_write_timecode true
+ mov64_gop_size 12
+ mov64_b_frames 0
+ mov64_bitrate 200000
+ mov64_bitrate_tolerance 4000000
+ mov64_quality_min 1
+ mov64_quality_max 3
+ checkHashOnRead false
+ name Write1
+ selected true
+ xpos 54
+ ypos 146
+}
+Viewer {
+ frame_range 0-24
+ monitorOutOutputTransform rec709
+ name Viewer1
+ xpos -188
+ ypos 114
+}
