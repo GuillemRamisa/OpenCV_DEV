@@ -11,6 +11,8 @@
 
 #include <opencv2/opencv.hpp>
 #include <iostream>
+#include <stdint.h>
+
 
 // namespaces
 using namespace cv;
@@ -38,6 +40,7 @@ int main() {
 //    // channels RGB = 3 channels
 //    cout << "image channels: " <<img.channels() << endl;
 //
+
     
     
     
@@ -69,6 +72,21 @@ int main() {
 //    waitKey(0);
 //
     
+//    // Visualizing individual channels using the split method
+//    // basic read image
+//    string pathJPEG = "CMS_512.jpeg";
+//
+//    // src and dst mat
+//    Mat img = imread(pathJPEG);
+//    // define the mat dimentions
+//    Mat splitChannels[3];
+//    // split image using split function
+//    split(img, splitChannels);
+//
+//    // show channel by access
+//    imshow("JPEG", splitChannels[1]);
+//    waitKey(0);
+//
     
     
     /*      /////// /////// /////// /////// VIDEO /////// /////// /////// ///////     */
@@ -248,34 +266,84 @@ int main() {
 //    waitKey(0);
     
 //    /*      /////// /////// /////// /////// DRAW PIXELS!! /////// /////// /////// ///////     */
+//
+//    // basic read image
+//    string pathJPEG = "CMS_512.jpeg";
+//    Mat img = imread(pathJPEG);
+//    int V = 10;
+//
+//    // 2D iterator
+//    for (int x = 0; x < img.cols; x++)
+//    {
+//        for (int y = 0; y < img.rows; y++)
+//        {
+//            // mat.at<Vec3b>(x,y)[c] = value;
+//            img.at<Vec3b>(x, y)[0] = img.at<Vec3b>(x, y)[0] * 0.5f;
+//            img.at<Vec3b>(x, y)[1] = 0;
+//            img.at<Vec3b>(x, y)[2] = 0;
+//        }
+//    }
+//
+//    img.at<uchar>(10, 10) = 0;
+//
+//    img.at<Vec3b>(10, 10)[0] = 0;
+//    img.at<Vec3b>(10, 15)[1] = 0;
+//    img.at<Vec3b>(10, 20)[2] = 0;
+//
+//    imshow("JPEG", img);
+//    waitKey(0);
+
+
+    /*      /////// /////// /////// /////// REMAP IMAGES /////// /////// /////// ///////     */
+
+    //RGB = 012
+    //BGR = 210
+    //Y Cb Cr
+    
+    // G->R
+    // B->G
+    // R->0
     
     // basic read image
     string pathJPEG = "CMS_512.jpeg";
-    Mat img = imread(pathJPEG);
-    int V = 5;
+//    string pathJPEG = "CMS_512.exr";
+    Mat img = imread(pathJPEG, IMREAD_UNCHANGED);
+//    string pathJPEG = "CMS_3x3.jpeg";
 
-    // 2D iterator
-    for (int x = 0; x < img.rows; x++) {
-        for (int y = 0; y < img.cols; y++) {
-            if (x % V && y % V) {
-                // mat.at<Vec3b>(x,y)[c] = value;
-                img.at<Vec3b>(x, y)[0] = 0;
-                img.at<Vec3b>(x, y)[1] = 0;
-                img.at<Vec3b>(x, y)[2] = 0;
-            }
+//    string pathYCbCr = "CMS_YCbCr_512.jpeg";
+//    Mat imgYCbCr = imread(pathYCbCr);
+    
+    Mat img_REMAPED = cv::Mat::zeros(img.size(), img.type());
+
+    Mat img_YCbCr;
+    cvtColor(img, img_YCbCr, COLOR_RGB2YCrCb);
+ 
+    Mat img_YCbCr_corrected;
+    cvtColor(img_YCbCr, img_YCbCr_corrected, COLOR_BGR2RGB);
+
+    for(int r = 0; r < img.rows; r++)
+    {
+        for(int c = 0; c < img.cols; c++)
+        {
+            Vec3b rgbColorUV = img_YCbCr_corrected.at<Vec3b>(r,c);
+            Vec3b rgbColor = img.at<Vec3b>(r,c);
+            img_REMAPED.at<Vec3b>(rgbColorUV[1]*2,rgbColorUV[0]*2) = rgbColor;
         }
     }
-    
-//    img.at<uchar>(10, 10) = 0;
-    
-    imshow("JPEG", img);
-    waitKey(0);
-    
-//    img.at<Vec3b>(10, 10)[0] = 0;
-//    img.at<Vec3b>(10, 10)[1] = 0;
-//    img.at<Vec3b>(10, 10)[2] = 0;
 
+    Mat img_out;
+    rotate(img_REMAPED, img_out, ROTATE_90_COUNTERCLOCKWISE);
     
+    imshow("rgb", img);
+    imshow("img_out", img_out);
+    
+    
+//    imshow("imgYCbCr", imgYCbCr);
+//    imshow("img_YCbCr_corrected", img_YCbCr_corrected);
+
+
+    waitKey(0);
+
     
     
 //    /*      /////// /////// /////// /////// COLOR CONVERSIONS /////// /////// /////// ///////     */
