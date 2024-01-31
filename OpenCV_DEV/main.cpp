@@ -19,28 +19,30 @@ using namespace std;
 
 int main() {
     
-    /*      /////// /////// /////// /////// ACCESS DATA /////// /////// /////// ///////     */
-        // basic read image
-    string pathJPEG = "CMS_512.jpeg";
-    Mat img = imread(pathJPEG);
-//    imshow("JPEG", img);
+//    /*      /////// /////// /////// /////// ACCESS DATA /////// /////// /////// ///////     */
     
-    // image dimentions
-    cout << img.size() << endl;
+//        // basic read image
+//    string pathJPEG = "CMS_512.jpeg";
+//    Mat img = imread(pathJPEG);
+////    imshow("JPEG", img);
+//
+//    // image dimentions
+//    cout << img.size() << endl;
+//
+//    // rows / columns
+//    cout <<"rows: "<< img.rows <<", columns: "<< img.cols <<endl;
+//
+//    // dimensions of the image (width * height) = 2 dimensions
+//    cout << "image dimensions: " <<img.dims << endl;
+//
+//    // channels RGB = 3 channels
+//    cout << "image channels: " <<img.channels() << endl;
+//
     
-    // rows / columns
-    cout <<"rows: "<< img.rows <<", columns: "<< img.cols <<endl;
-    
-    // dimensions of the image (width * height) = 2 dimensions
-    cout << "image dimensions: " <<img.dims << endl;
-    
-    // channels RGB = 3 channels
-    cout << "image channels: " <<img.channels() << endl;
     
     
-    /*      /////// /////// /////// /////// IMAGES /////// /////// /////// ///////     */
-    
-    
+//    /*      /////// /////// /////// /////// IMAGES /////// /////// /////// ///////     */
+
 //    // declare and init a string with the path to the image
 //    string pathJPEG = "CMS_512.jpeg";
 //    string pathEXR  = "CMS_512.exr";
@@ -71,8 +73,6 @@ int main() {
     
     /*      /////// /////// /////// /////// VIDEO /////// /////// /////// ///////     */
 
-    
-    
 //     VIDEO can be loaded as well
 //
 //     declare and init a string with the path to the image
@@ -98,7 +98,7 @@ int main() {
 
     
 
-//// And of course all image filtering can be used on the captured image
+//    //And of course all image filtering can be used on the captured image
 //    VideoCapture cap2(CAP_ANY);
 //
 //    Mat img2;
@@ -116,10 +116,10 @@ int main() {
 //        waitKey(1);
 //    }
     
+
     
 //    /*      /////// /////// /////// /////// improc FUNCTIONS /////// /////// /////// ///////     */
-//
-//
+
 //    // basic read image
 //    string pathJPEG = "CMS_512.jpeg";
 //    Mat img = imread(pathJPEG);
@@ -176,12 +176,11 @@ int main() {
 //    Mat img_COLORMAP;
 //    applyColorMap(img, img_COLORMAP, 16);
 //    imshow("COLORMAP", img_COLORMAP);
-    
-    
-    
 
+    
+    
 //    /*      /////// /////// /////// /////// RESIZE and CROP /////// /////// /////// ///////     */
-//
+
 //    // basic read image
 //    string pathJPEG = "CMS_512.jpeg";
 //    Mat img = imread(pathJPEG);
@@ -210,13 +209,17 @@ int main() {
 //    imshow("CROP", img_ROI);
 
     
+    
 //    /*      /////// /////// /////// /////// DRAW SHAPES AND TEXTS /////// /////// /////// ///////     */
-//
+
 //    // To create an empty "canvas" we can define a new Mat and assign some parameters to an img
 //    // the Mat object can have: sizeX, sizeY, the data type, and a Scalar()
 //    // the datatype informs what kind of buffer we are going to create
 //    //      CV_8UC3: 8 bit image = 256 values,  Unsigned = 0 to 255, C3 = RGB channels
 //    //      Many data types can be used, check: interface.h
+//    //      0 to 255 for CV_8U images
+//    //      0 to 65535 for CV_16U images
+//    //      0 to 1 for CV_32F images
 //    // the Scalar function is a <vector> data type like that can be used to create a structure, check: types.h
 //    Mat img_BLANK(512, 512, CV_8UC3, Scalar(255,128,128));
 //
@@ -243,6 +246,57 @@ int main() {
 //    imshow("CANVAS", img_BLANK);
 //
 //    waitKey(0);
+    
+//    /*      /////// /////// /////// /////// DRAW PIXELS!! /////// /////// /////// ///////     */
+    
+    // basic read image
+    string pathJPEG = "CMS_512.jpeg";
+    Mat img = imread(pathJPEG);
+    int V = 5;
+
+    // 2D iterator
+    for (int x = 0; x < img.rows; x++) {
+        for (int y = 0; y < img.cols; y++) {
+            if (x % V && y % V) {
+                // mat.at<Vec3b>(x,y)[c] = value;
+                img.at<Vec3b>(x, y)[0] = 0;
+                img.at<Vec3b>(x, y)[1] = 0;
+                img.at<Vec3b>(x, y)[2] = 0;
+            }
+        }
+    }
+    
+//    img.at<uchar>(10, 10) = 0;
+    
+    imshow("JPEG", img);
+    waitKey(0);
+    
+//    img.at<Vec3b>(10, 10)[0] = 0;
+//    img.at<Vec3b>(10, 10)[1] = 0;
+//    img.at<Vec3b>(10, 10)[2] = 0;
+
+    
+    
+    
+//    /*      /////// /////// /////// /////// COLOR CONVERSIONS /////// /////// /////// ///////     */
+
+//    // basic read image
+//    string pathJPEG = "CMS_512.jpeg";
+//    Mat img = imread(pathJPEG);
+//    Mat img_YCbCr, img_RGB;
+//    cvtColor(img, img_YCbCr, COLOR_RGB2YCrCb);
+//
+//    cvtColor(img_YCbCr, img_RGB, COLOR_YCrCb2RGB);
+//
+//    imshow("JPEG", img);
+//    imshow("YCbCr", img_YCbCr);
+//    imshow("RGB", img_RGB);
+//
+//
+//
+//    waitKey(0);
+    
+//    destroyAllWindows();
     return 0;
     
 }
