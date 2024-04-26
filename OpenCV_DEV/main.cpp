@@ -306,6 +306,7 @@ int main() {
     
     // basic read image
     string pathJPEG = "CMS_512.jpeg";
+//    string pathJPEG = "/Users/guillemramisadesoto/Desktop/FOTOS/FOTOS_IMPRIMIR/OUTPUT/DSC_0125.JPG";
 //    string pathJPEG = "CMS_512.exr";
     Mat img = imread(pathJPEG, IMREAD_UNCHANGED);
 //    string pathJPEG = "CMS_3x3.jpeg";
@@ -327,18 +328,18 @@ int main() {
         {
             Vec3b rgbColorUV = img_YCbCr_corrected.at<Vec3b>(r,c);
             Vec3b rgbColor = img.at<Vec3b>(r,c);
-            img_REMAPED.at<Vec3b>(rgbColorUV[1]*2,rgbColorUV[0]*2) = rgbColor;
+            img_REMAPED.at<Vec3b>(rgbColorUV[1],rgbColorUV[0]) = rgbColor;
         }
     }
 
-    Mat img_out;
-    rotate(img_REMAPED, img_out, ROTATE_90_COUNTERCLOCKWISE);
+//    Mat img_out;
+//    rotate(img_REMAPED, img_out, ROTATE_90_COUNTERCLOCKWISE);
     
     imshow("rgb", img);
-    imshow("img_out", img_out);
+//    imshow("img_out", img_out);
     
     
-//    imshow("imgYCbCr", imgYCbCr);
+    imshow("imgYCbCr", img_REMAPED);
 //    imshow("img_YCbCr_corrected", img_YCbCr_corrected);
 
 
